@@ -1,22 +1,36 @@
 #!/bin/bash
 
-# Create database directory and empty SQLite file
-mkdir -p database
-touch database/database.sqlite
+echo "Creating a static-only build for Netlify..."
 
-# Copy netlify.env to .env
-cp netlify.env .env
+# Start fresh with a new public directory
+mkdir -p public_new
 
-# Install composer dependencies without running scripts
-composer install --no-scripts --no-interaction
+# Copy our static HTML file as index.html
+cp public/static-preview.html public_new/index.html
 
-# Install npm dependencies
-npm install
+# Copy existing static assets if they exist
+if [ -d "public/build" ]; then
+  cp -r public/build public_new/
+fi
 
-# Build front-end assets
-npm run build
+if [ -d "public/images" ]; then
+  cp -r public/images public_new/
+fi
 
-# Copy index.php to index.html for static fallback
-cp public/index.php public/index.html
+if [ -d "public/favicon.ico" ]; then
+  cp public/favicon.ico public_new/
+fi
 
-echo "Build completed without running Laravel database operations" 
+if [ -d "public/robots.txt" ]; then
+  cp public/robots.txt public_new/
+fi
+
+# Copy redirects file for Netlify
+cp public/_redirects public_new/
+
+# Move public_new to public
+rm -rf public_old
+mv public public_old
+mv public_new public
+
+echo "Static site preparation complete" 
