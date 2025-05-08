@@ -1,0 +1,29 @@
+[build]
+  command = "mkdir -p database && touch database/database.sqlite && cp netlify.env .env && composer install --no-interaction --prefer-dist && php artisan key:generate --force && npm install && npm run build && cp public/index.php public/index.html"
+  publish = "public"
+
+[build.environment]
+  PHP_VERSION = "8.2"
+  NODE_VERSION = "18"
+  APP_ENV = "production"
+  APP_DEBUG = "false"
+  DB_CONNECTION = "sqlite"
+  DB_DATABASE = "database/database.sqlite"
+  CACHE_DRIVER = "array"
+  SESSION_DRIVER = "array"
+  QUEUE_DRIVER = "array"
+  
+# Explicitly telling Netlify to skip database operations during build
+[context.production.environment]
+  NETLIFY_USE_YARN = "true"
+  SKIP_DB_OPERATIONS = "true"
+
+# Netlify PHP function handlers
+[functions]
+  directory = "netlify/functions"
+
+# Redirect all routes to Laravel's index.php
+[[redirects]]
+  from = "/*"
+  to = "/index.php"
+  status = 200 
