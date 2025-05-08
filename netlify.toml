@@ -1,5 +1,5 @@
 [build]
-  command = "mkdir -p database && touch database/database.sqlite && cp netlify.env .env && composer install --no-interaction --prefer-dist && php artisan key:generate --force && npm install && npm run build && cp public/index.php public/index.html"
+  command = "bash ./scripts/netlify-build.sh"
   publish = "public"
 
 [build.environment]
@@ -8,7 +8,7 @@
   APP_ENV = "production"
   APP_DEBUG = "false"
   DB_CONNECTION = "sqlite"
-  DB_DATABASE = "database/database.sqlite"
+  DB_DATABASE = "/opt/build/repo/database/database.sqlite"
   CACHE_DRIVER = "array"
   SESSION_DRIVER = "array"
   QUEUE_DRIVER = "array"
@@ -22,8 +22,8 @@
 [functions]
   directory = "netlify/functions"
 
-# Redirect all routes to Laravel's index.php
+# Redirect all routes to the static HTML file
 [[redirects]]
   from = "/*"
-  to = "/index.php"
+  to = "/index.html"
   status = 200 
