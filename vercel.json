@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "framework": "laravel",
+  "framework": null,
   "functions": {
     "api/index.php": {
       "runtime": "vercel-php@0.6.0"
@@ -24,5 +24,9 @@
     "CACHE_DRIVER": "array",
     "LOG_CHANNEL": "stderr",
     "SESSION_DRIVER": "cookie"
-  }
+  },
+  "builds": [
+    { "src": "api/index.php", "use": "vercel-php@0.6.0" },
+    { "src": "public/**", "use": "@vercel/static" }
+  ]
 } 
