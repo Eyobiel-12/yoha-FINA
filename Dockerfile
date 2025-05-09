@@ -33,6 +33,9 @@ WORKDIR /var/www
 # Copy existing application directory contents
 COPY . /var/www
 
+# Use Railway environment if it exists
+RUN if [ -f .env.railway ]; then cp .env.railway .env; fi
+
 # Install dependencies
 RUN composer install --optimize-autoloader --no-dev
 
