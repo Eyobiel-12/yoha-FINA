@@ -10,7 +10,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nodejs \
-    npm
+    npm \
+    nginx \
+    supervisor
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -55,9 +57,18 @@ RUN php artisan migrate --force
 # Create storage link
 RUN php artisan storage:link
 
+# Setup nginx
+COPY nginx.conf /etc/nginx/sites-available/default
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
+
+# Setup supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # Default port (will be overridden by environment variable)
 ENV PORT=8000
-# Expose the port dynamically
+
+# Expose the port
 EXPOSE ${PORT}
 
 # Set up entrypoint
