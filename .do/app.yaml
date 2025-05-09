@@ -1,0 +1,13 @@
+name: hoveniers-finance
+services:
+  - name: web
+    environment_slug: php
+    buildpacks:
+      - name: php
+    envs:
+      - key: PHP_EXTENSIONS
+        value: "pdo_sqlite,sqlite3"
+    run_command: heroku-php-apache2 public/
+    http_port: 8080
+    routes:
+      - path: / 
