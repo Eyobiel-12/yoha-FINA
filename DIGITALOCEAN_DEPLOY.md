@@ -10,6 +10,7 @@ This guide covers deploying your Yohannes Hoveniersbedrijf financial management 
    - deploy.sh (deployment script)
    - production-checklist.md (deployment checklist)
    - .env.example (for reference)
+   - database/database.sqlite (if using SQLite)
 
 ## Step 2: Create a DigitalOcean Droplet
 
@@ -65,27 +66,35 @@ nano .env
    - DB_DATABASE, DB_USERNAME, and DB_PASSWORD with the values from deploy.sh
    - Generate an app key: `php artisan key:generate`
 
-3. Install Composer dependencies:
+3. If using SQLite, ensure the database file exists:
+
+```bash
+# For SQLite
+mkdir -p database
+touch database/database.sqlite
+```
+
+4. Install Composer dependencies:
 
 ```bash
 composer install --no-dev --optimize-autoloader
 ```
 
-4. Run migrations and seed the database:
+5. Run migrations and seed the database:
 
 ```bash
 php artisan migrate --force
 php artisan db:seed --force
 ```
 
-5. Set proper permissions:
+6. Set proper permissions:
 
 ```bash
 sudo chown -R www-data:www-data storage bootstrap/cache
 php artisan storage:link
 ```
 
-6. Cache configuration for better performance:
+7. Cache configuration for better performance:
 
 ```bash
 php artisan config:cache
