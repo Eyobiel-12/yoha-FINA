@@ -22,5 +22,7 @@ php artisan storage:link --force
 # Run migrations if needed
 php artisan migrate --force
 
-echo "Laravel application starting on port 8000..."
-php artisan serve --host=0.0.0.0 --port=8000 
+# Use PORT environment variable with fallback to 8000
+PORT=${PORT:-8000}
+echo "Laravel application starting on port $PORT..."
+php artisan serve --host=0.0.0.0 --port=$PORT 

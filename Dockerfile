@@ -55,8 +55,10 @@ RUN php artisan migrate --force
 # Create storage link
 RUN php artisan storage:link
 
-# Expose port 8000
-EXPOSE 8000
+# Default port (will be overridden by environment variable)
+ENV PORT=8000
+# Expose the port dynamically
+EXPOSE ${PORT}
 
 # Set up entrypoint
 COPY ./docker-entrypoint.sh /usr/local/bin/
