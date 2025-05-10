@@ -1,1 +1,3 @@
 # This file intentionally left empty
+# Allow SQLite database to be committed
+!database.sqlite
